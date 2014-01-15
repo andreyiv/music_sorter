@@ -6,31 +6,28 @@ class Node:
     """
     Class to represent a Node in the tree, in this instance a song.
     """
-    title = ''
-    track_num = 0
-    album = ''
-    artists = []
-    location = ''
-    parent = None
 
-    def __init__(self, title, track_num, album, artists, location, parent = None):
+    def __init__(self, title, track_num, album, location, artists = None, parent = None):
         """
         Contructor taking all members as parameters.
         """
         self.title = title
         self.track_num = track_num
         self.album = album
-        self.artists = artists
         self.location = location
         self.parent = parent
+        if artists == None:
+            self.artists = []
+        else:
+            self.artists = artists
 
     def __repr__(self):
         string_representation = '<Node instance containing: ' + \
             'Title = ' + str(self.title) + ', ' + \
             'Track Number = ' + str(self.track_num) + ', ' + \
             'Album = ' + str(self.album) + ', ' + \
-            'Artists = ' + str(self.artists) + ', ' + \
-            'Location on disk = ' + str(self.location) + '>'
+            'Location on disk = ' + str(self.location) + ', ' \
+            'Artists = ' + str(self.artists) + '>'
         return string_representation
 
     def set_parent(self, parent):
@@ -45,20 +42,19 @@ class Link:
     """
     Class to represent a Link in the tree, basically not an end node.
     """
-    type_of_link = '' # Meant to be Collection, Artist, or Album
-    name = ''
-    children = []
-    parent = None
 
-    def __init__(self, type_of_link, name, children = [], parent = None):
+    def __init__(self, type_of_link, name, children = None, parent = None):
         """
         Constructor taking all members as parameters.
         """
 
-        self.type_of_link = type_of_link
+        self.type_of_link = type_of_link # Meant to be Collection, Artist, or Album
         self.name = name
-        self.children = children
         self.parent = parent
+        if children == None:
+            self.children = []
+        else:
+            self.children = children
 
     def __repr__(self):
         string_representation = '<Link instance of: ' + \
@@ -92,36 +88,79 @@ def test_tree():
     import tree
 
     # Make a few nodes
-    n1 = tree.Node('t1', 1, 'al1', ['ar1'], '/home/1')
-    n2 = tree.Node('t2', 2, 'al2', ['ar2'], '/home/2')
-    n3 = tree.Node('t3', 3, 'al3', ['ar3'], '/home/3')
+    title = 't1'
+    track_num = 1
+    album = 'al1'
+    location = '/home/1'
+    artists = ['ar1']
+    n1 = tree.Node(title, track_num, album, location, artists)
+    assert n1.title == title
+    assert n1.track_num == track_num
+    assert n1.album == album
+    assert n1.location == location
+    assert n1.artists == artists
+
+    title = 't2'
+    track_num = 2
+    album = 'al2'
+    location = '/home/2'
+    artists = ['ar2']
+    n2 = tree.Node(title, track_num, album, location, artists)
+    assert n2.title == title
+    assert n2.track_num == track_num
+    assert n2.album == album
+    assert n2.location == location
+    assert n2.artists == artists
+
+    title = 't3'
+    track_num = 3
+    album = 'al3'
+    location = '/home/3'
+    artists = ['ar3']
+    n3 = tree.Node(title, track_num, album, location, artists)
+    assert n3.title == title
+    assert n3.track_num == track_num
+    assert n3.album == album
+    assert n3.location == location
+    assert n3.artists == artists
 
     # Make a few links
-    l1 = tree.Link('collection', 'my_c')
-    l1_1 = tree.Link('artist', 'ar')
-    l1_1_1 = tree.Link('album', 'al')
+    type_of_link = 'collection'
+    name = 'my_c'
+    l1 = tree.Link(type_of_link, name)
+    assert l1.type_of_link == type_of_link
+    assert l1.name == name
+
+    type_of_link = 'artist'
+    name = 'ar'
+    l1_1 = tree.Link(type_of_link, name)
+    assert l1_1.type_of_link == type_of_link
+    assert l1_1.name == name
+
+    type_of_link = 'album'
+    name = 'al'
+    l1_1_1 = tree.Link(type_of_link, name)
+    assert l1_1_1.type_of_link == type_of_link
+    assert l1_1_1.name == name
 
     # Associate links with nodes
-    print('Prior to node association')
-    print(l1_1_1)
-    print(l1_1)
-    print(l1)
     l1_1_1.add_child(n1)
+    assert len(l1_1_1.children) == 1
+    assert l1_1_1.children[0] == n1
     l1_1_1.add_child(n2)
+    assert len(l1_1_1.children) == 2
+    assert l1_1_1.children[0] == n1
+    assert l1_1_1.children[1] == n2
     l1_1_1.add_child(n3)
+    assert len(l1_1_1.children) == 3
+    assert l1_1_1.children[0] == n1
+    assert l1_1_1.children[1] == n2
+    assert l1_1_1.children[2] == n3
 
     # Associate links with links
-    print('Prior to link association')
-    print(l1_1_1)
-    print(l1_1)
-    print(l1)
     l1_1.add_child(l1_1_1)
-    print('After first link association')
-    print(l1_1_1)
-    print(l1_1)
-    print(l1)
+    assert len(l1_1.children) == 1
+    assert l1_1.children[0] == l1_1_1
     l1.add_child(l1_1)
-    print('After last link association')
-    print(l1_1_1)
-    print(l1_1)
-    print(l1)
+    assert len(l1.children) == 1
+    assert l1.children[0] == l1_1
