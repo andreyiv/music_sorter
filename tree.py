@@ -7,11 +7,13 @@ class Node:
     Class to represent a Node in the tree, in this instance a song.
     """
 
-    def __init__(self, title, track_num, album, location, artists = None, parent = None):
+    def __init__(self, name, track_num,
+                 album, location, artists = None,
+                 parent = None):
         """
         Contructor taking all members as parameters.
         """
-        self.title = title
+        self.name = name
         self.track_num = track_num
         self.album = album
         self.location = location
@@ -23,7 +25,7 @@ class Node:
 
     def __repr__(self):
         string_representation = '<Node instance containing: ' + \
-            'Title = ' + str(self.title) + ', ' + \
+            'Name = ' + str(self.name) + ', ' + \
             'Track Number = ' + str(self.track_num) + ', ' + \
             'Album = ' + str(self.album) + ', ' + \
             'Location on disk = ' + str(self.location) + ', ' \
@@ -40,10 +42,12 @@ class Node:
 
 class Link:
     """
-    Class to represent a Link in the tree, basically not an end node.
+    Class to represent a Link in the tree,
+    basically not an end node.
     """
 
-    def __init__(self, type_of_link, name, children = None, parent = None):
+    def __init__(self, type_of_link, name,
+                 children = None, parent = None):
         """
         Constructor taking all members as parameters.
         """
@@ -69,8 +73,13 @@ class Link:
         Adds a child to list of children.
         """
 
+        for instance in self.children:
+            if instance.name == child.name:
+                return False
+
         child.parent = self
         self.children.append(child)
+        return True
 
     def set_parent(self, parent):
         """
@@ -78,6 +87,7 @@ class Link:
         """
 
         self.parent = parent
+        return True
 
 def test_tree():
     """
@@ -88,37 +98,37 @@ def test_tree():
     import tree
 
     # Make a few nodes
-    title = 't1'
+    name = 't1'
     track_num = 1
     album = 'al1'
     location = '/home/1'
     artists = ['ar1']
-    n1 = tree.Node(title, track_num, album, location, artists)
-    assert n1.title == title
+    n1 = tree.Node(name, track_num, album, location, artists)
+    assert n1.name == name
     assert n1.track_num == track_num
     assert n1.album == album
     assert n1.location == location
     assert n1.artists == artists
 
-    title = 't2'
+    name = 't2'
     track_num = 2
     album = 'al2'
     location = '/home/2'
     artists = ['ar2']
-    n2 = tree.Node(title, track_num, album, location, artists)
-    assert n2.title == title
+    n2 = tree.Node(name, track_num, album, location, artists)
+    assert n2.name == name
     assert n2.track_num == track_num
     assert n2.album == album
     assert n2.location == location
     assert n2.artists == artists
 
-    title = 't3'
+    name = 't3'
     track_num = 3
     album = 'al3'
     location = '/home/3'
     artists = ['ar3']
-    n3 = tree.Node(title, track_num, album, location, artists)
-    assert n3.title == title
+    n3 = tree.Node(name, track_num, album, location, artists)
+    assert n3.name == name
     assert n3.track_num == track_num
     assert n3.album == album
     assert n3.location == location
