@@ -25,19 +25,27 @@ for dirname, dirnames, filenames in os.walk(path):
                 'full_path': str(song_full_path)})
 
         except AttributeError:
-            print('Got attribute error for song: ' + str(song_full_path))
+            #print('Got attribute error for song: ' + str(song_full_path))
             pass
 
 
+print('Sorting songs into albums')
 albums = {}
+# Sort songs into albums
 for song in songs:
     try:
-        albums[song['album']].append(song)
+        albums[song['album']]['songs'].append(song)
     except KeyError:
-        print('No album')
-        albums[song['album']] = [song]
+        albums[song['album']] = {'songs': [song], 'artists': []}
+
+# Get artists for albums
+for album in albums:
+    artists = {}
+    for song in albums[album]['songs']:
+        artists[song['artist']] = 0
+    albums[album]['artists'] = artists.keys()
 
 for album in albums:
-    print(str(album) + ':')
-    for song in albums[album]:
-        print('    ' + str(song['artist']))
+    if len(albums[album]['artists']) > 1:
+        print 'Album: ' + str(album) + ', has more than 1 artist, artists: ', str(albums[album]['artists'])
+
