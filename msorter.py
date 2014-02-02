@@ -44,7 +44,6 @@ for dirname, dirnames, filenames in os.walk(path):
                 'full_path': str(song_full_path)})
 
         except AttributeError:
-            #TODO: Write to a log a list of files couldn't be processed
             logger.info('Could not read ID3 data from file: ' +
                 str(song_full_path))
             pass
