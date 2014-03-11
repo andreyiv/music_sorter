@@ -36,7 +36,7 @@ path = sys.argv[1] if len(sys.argv) > 1 else '.'
 for dirname, dirnames, filenames in os.walk(path):
     for filename in filenames:
         song_full_path = os.path.join(dirname, filename)
-        logger.debug('Current file: ' + song_full_path)
+        logger.debug('Current file: ' + song_full_path + '\n')
         try:
             af = eyed3.load(song_full_path)
             songs.append({u'title': unicode(af.tag.title).title(),
@@ -91,6 +91,6 @@ temp = json.dumps(albums, indent=4)
 fp.write(temp)
 fp.close()
 
-fp = io.open('artists_db.txt', 'wb', encoding='utf-8')
+fp = io.open('artists_db.txt', 'wb')
 fp.write(json.dumps(artists, indent=4, encoding="utf-8"))
 fp.close()
